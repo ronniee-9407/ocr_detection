@@ -66,13 +66,13 @@ curr_settings_view = this.settings_view[0];
   addCam(camName: any){
     // console.log('camName',camName);
     let lastChar = camName.charAt(camName.length - 1);
-    let cam_ip = <HTMLInputElement> document.getElementById('camIP'+lastChar);
+    let cam_ip = <HTMLInputElement> document.getElementById('camIP');
     let cam_ip_value = cam_ip.value;
-    let user = <HTMLInputElement> document.getElementById('userID'+lastChar);
+    let user = <HTMLInputElement> document.getElementById('userID');
     let user_id = user.value;
-    let pass = <HTMLInputElement> document.getElementById('password'+lastChar);
+    let pass = <HTMLInputElement> document.getElementById('password');
     let password = pass.value;
-    let port = <HTMLInputElement> document.getElementById('port'+lastChar);
+    let port = <HTMLInputElement> document.getElementById('port');
     let port_value = port.value;
 
     if(cam_ip_value == '' || user_id == '' || password == '' || port_value == ''){
@@ -84,7 +84,8 @@ curr_settings_view = this.settings_view[0];
       'ip': cam_ip_value,
       'userId': user_id,
       'password': password,
-      'port': port_value
+      'port': port_value,
+      'cam_name': camName
     }
     this.service.add_camera(cam_data).subscribe((data: any)=>{
 
@@ -120,6 +121,7 @@ curr_settings_view = this.settings_view[0];
   }
 
   logout(){
+    sessionStorage.removeItem('isUserLoggedIn');
     this.router.navigate(['/login']);
   }
 }

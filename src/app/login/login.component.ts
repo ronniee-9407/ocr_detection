@@ -35,16 +35,22 @@ export class LoginComponent implements OnInit {
       this.notifyService.showWarning('Please enter UserID and Password','Notification');
       return;
     }
-
-    this.service.login(login_data).subscribe((data: any)=>{
-      if(data['status']){
-        sessionStorage.setItem('isUserLoggedIn', 'true');
-        this.router.navigate(['/dashboard'])
-      }
-    },(error: any) => {
-      this.notifyService.showError('Please check your Server', 'Server Connection Error');
-    });
+    let login_flag = this.service.login(login_data);
+    if(login_flag){
+      sessionStorage.setItem('isUserLoggedIn', 'true');
+      this.router.navigate(['/dashboard']);
+    }else{
+      this.notifyService.showError('Invalid Login Credentials','Error !')
+    }
+    // this.service.login(login_data).subscribe((data: any)=>{
+    //   if(data['status']){
+    //     sessionStorage.setItem('isUserLoggedIn', 'true');
+    //     this.router.navigate(['/dashboard'])
+    //   }
+    // },(error: any) => {
+    //   this.notifyService.showError('Please check your Server', 'Server Connection Error');
+    // });
     // sessionStorage.setItem('isUserLoggedIn', 'true');
-    this.router.navigate(['/dashboard'])
+    // this.router.navigate(['/dashboard'])
   }
 }
