@@ -41,7 +41,6 @@ export class SuperUserComponent implements OnInit {
   startTime = '00:00';
   endTime = '23:59';
   picker: Litepicker | undefined;
-  search_date_time_flag: boolean = false;
 
   constructor(
     private service: BackendService,  
@@ -199,7 +198,6 @@ export class SuperUserComponent implements OnInit {
   }
 
   // searchDateTimeToggle(){
-  //   // console.log('searchDateTimeToggle called.......');
   //   this.search_date_time_flag = true;
   //   setTimeout(() => this.initializingDatePicker(), 0);
   // }
