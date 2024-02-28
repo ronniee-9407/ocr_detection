@@ -1,26 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { BackendService } from 'src/service/backend.service';
 import { NotificationService } from 'src/service/notification.service';
-import { webSocket } from 'rxjs/webSocket';
 import Litepicker from 'litepicker';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  selector: 'app-super-user',
+  templateUrl: './super-user.component.html',
+  styleUrls: ['./super-user.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class SuperUserComponent implements OnInit {
 
   view_list = ['Dashboard', 'Settings', 'Report', 'Report_details'];
   curr_view = this.view_list[0];
   curr_body = this.view_list[0];
-  dashBoard_data = {
-    "curr_slab": "12345",
-    "status": true,
-    "mode": "Auto"
-  };
+
+  settings_view = ['Camera', 'User'];
+  setting_icon_list = ['addCam.png', 'add-group.png'];
+  curr_settings_view = this.settings_view[0];
   report_data = {
     "Date_time": "07-02-2024 13:10",
     "jobID": "A123",
@@ -28,7 +25,6 @@ export class DashboardComponent implements OnInit {
     "actual_slab": "12345",
     "status": true
   };
-  live_table_data = Array(1).fill(this.dashBoard_data).flat();
   report_table_data_dashboard = Array(5).fill(this.report_data).flat();
   temp = {
     'date_time': '27-02-2024 17:00',
@@ -38,93 +34,27 @@ export class DashboardComponent implements OnInit {
     'result': true,
     'mode': 'Auto'
   }
-  report_page_table_data = Array(15).fill(this.temp).flat();
-
-  cam_feed_1: any;
-  cam_feed_2: any;
-  cam_status_1: boolean = false;
-  cam_status_2: boolean = false;
-  search_date_time_flag: boolean = false;
+  report_page_table_data = Array(50).fill(this.temp).flat();
 
   startDate: any;
   endDate: any;
   startTime = '00:00';
   endTime = '23:59';
   picker: Litepicker | undefined;
-
-  settings_view = ['Camera', 'Database'];
-  setting_icon_list = ['addCam.png', 'database.png'];
-  curr_settings_view = this.settings_view[0];
-
-  manual_mode: boolean = false;
+  search_date_time_flag: boolean = false;
 
   constructor(
-    private service: BackendService, 
-    private sanitizer: DomSanitizer, 
+    private service: BackendService,  
     private router: Router, 
-    private notifyService: NotificationService, 
+    private notifyService: NotificationService,
   ){}
 
   ngOnInit(): void {
-    // this.socketFeed();
-  }
-
-  socketFeed(){
-    let socket_url = "ws://192.168.68.165:5000/video_feed";
-    let socket = webSocket(socket_url);
-    let socket_feed = socket.subscribe((data: any)=>{
-      console.log('websocket data',data);
-
-      this.cam_status_1 = data['cam_status_1'];
-      this.cam_status_2 = data['cam_status_2'];
-      let frame_1 = 'data:image/jpg;base64,' + data['image_1'];
-      this.cam_feed_1 = this.sanitizer.bypassSecurityTrustUrl(frame_1);
-      let frame_2 = 'data:image/jpg;base64,' + data['image_2'];
-      this.cam_feed_2 = this.sanitizer.bypassSecurityTrustUrl(frame_2);
-      
-      this.live_table_data = data['live_table_data'];
-    })
-  }
-
-  change_mode(){
-    let curr_selected_mode = '';
-    if(this.manual_mode){
-      this.manual_mode = false;
-      curr_selected_mode = 'Auto';
-    }
-    else{
-      this.manual_mode = true; 
-      curr_selected_mode = 'Manual';
-    }
-
-    let mode_send = {
-      'mode': curr_selected_mode
-    }
-
-    this.service.select_mode(mode_send).subscribe((data: any)=>{
-      if(data['status'])
-        this.notifyService.showInfo(data['message'],'Notification');
-    },(error: any)=>{
-      this.notifyService.showError('Please check your Server', 'Server Connection Error');
-    });
-  }
-
-  submitSlabId(){
-    console.log('submitSlabId called.....');
-    let slab = <HTMLInputElement> document.getElementById('manual_slabId');
-    let slab_id = slab.value;
-    if(slab_id == ''){
-      this.notifyService.showWarning('⚠ All inputs are required','Notification');
-    }
-    this.service.manual_slabID(slab_id).subscribe((data :any)=>{
-      console.log('manual_slabID',data);
-    },(error: any)=>{
-      this.notifyService.showError('Please check your Server', 'Server Connection Error');
-    });
+        
   }
 
   changeView(index: any){
-    // if(index == 2){
+    // if(index == 0){
     //   this.service.get_report_page_dashboard_data().subscribe((data: any)=>{
     //     console.log('get_report_page_dashboard_data',data); 
     //   },(error: any)=>{
@@ -133,6 +63,9 @@ export class DashboardComponent implements OnInit {
     // }
     this.curr_view = this.view_list[index];
     this.curr_body = this.view_list[index];
+    if(index == 2){
+      setTimeout(() => this.initializingDatePicker(), 0);
+    }
   }
 
   changeSettingView(index: any){
@@ -180,36 +113,43 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  addDB(){
-    let host = <HTMLInputElement> document.getElementById('host');
-    let host_value = host.value;
-    let user = <HTMLInputElement> document.getElementById('userID');
-    let user_id = user.value;
-    let pass = <HTMLInputElement> document.getElementById('password');
+  addUser(){
+    let name = <HTMLInputElement> document.getElementById('new_username');
+    let userName = name.value;
+    let userId = <HTMLInputElement> document.getElementById('new_user_id');
+    let user_id = userId.value;
+    let pass = <HTMLInputElement> document.getElementById('new_password');
     let password = pass.value;
-    let db = <HTMLInputElement> document.getElementById('db');
-    let port = db.value;
+    let cnf_pass = <HTMLInputElement> document.getElementById('cnf_new_password');
+    let cnf_password = cnf_pass.value;
 
-    if(host_value == '' || user_id == '' || password == '' || port == ''){
+    if(userName == '' || user_id == '' || password == '' || cnf_password == ''){
       this.notifyService.showWarning('All input fields are required ⚠','Notification');
       return;
     }
 
-    let db_data = {
-      'ip': host_value,
+    if(password != cnf_password){
+      this.notifyService.showWarning('Password and Confirm Password not matched ⚠','Notification');
+      return;
+    }
+
+    let user_data = {
+      'name': userName,
       'userId': user_id,
       'password': password,
-      'port': port
+      'user_type': 'User'
     };
-    this.service.add_DB(db_data).subscribe((data: any)=>{
+    this.service.add_user(user_data).subscribe((data: any)=>{
+      console.log('add_user',data);
       if(data['status']){
-        this.notifyService.showSuccess('Database updated successfully','Notification');
-        host_value = '';
-        user_id = '';
-        password = '';
+        this.notifyService.showSuccess('User added successfully','Notification');
+        name.value = '';
+        userId.value = '';
+        pass.value = '';
+        cnf_pass.value = '';
       }
       else{
-        this.notifyService.showWarning('Wrong Credentials ⚠','Credentials not matched');
+        this.notifyService.showWarning('Wrong Credentials','User not added');
       }
     },
     (error: any)=>{
@@ -217,48 +157,52 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // addPLC(){
-  //   let host = <HTMLInputElement> document.getElementById('host');
-  //   let host_value = host.value;
-  //   let user = <HTMLInputElement> document.getElementById('userID');
-  //   let user_id = user.value;
-  //   let pass = <HTMLInputElement> document.getElementById('password');
-  //   let password = pass.value;
-  //   let plc = <HTMLInputElement> document.getElementById('plc');
-  //   let port = plc.value;
+  editUser(){
+    let user = <HTMLInputElement> document.getElementById('edit_user');
+    let userId = user.value;
+    let old_pass = <HTMLInputElement> document.getElementById('old_password');
+    let old_password = old_pass.value;
+    let new_pass = <HTMLInputElement> document.getElementById('new_edit_password');
+    let new_password = new_pass.value;
+    let cnf_pass = <HTMLInputElement> document.getElementById('cnf_edit_password');
+    let cnf_password = cnf_pass.value;
 
-  //   if(host_value == '' || user_id == '' || password == '' || port == ''){
-  //     this.notifyService.showWarning('All input fields are required ⚠','Notification');
-  //     return;
-  //   }
+    if(userId == '' || old_password == '' ||  new_password == '' || cnf_password == ''){
+      this.notifyService.showWarning('All input fields are required ⚠','Notification');
+      return;
+    }
+    if(new_password !== cnf_password){
+      this.notifyService.showWarning('Confirm Password not matched ⚠','Notification');
+      return;
+    }
 
-  //   let plc_data = {
-  //     'ip': host_value,
-  //     'userId': user_id,
-  //     'password': password,
-  //     'port': port
-  //   };
-  //   this.service.add_PLC(plc_data).subscribe((data: any)=>{
-  //     if(data['status']){
-  //       this.notifyService.showSuccess('PLC added successfully','Notification');
-  //       host.value = '';
-  //       user.value = '';
-  //       pass.value = '';
-  //     }
-  //     else{
-  //       this.notifyService.showWarning('Wrong Credentials ⚠','Credentials not matched');
-  //     }
-  //   },
-  //   (error: any)=>{
-  //     this.notifyService.showError('Please check your Server', 'Server Connection Error');
-  //   });
-  // }
+    let user_data = {
+      'userId' : userId,
+      'old_password' : old_password,
+      'new_password' : new_password
+    }
 
-  searchDateTimeToggle(){
-    // console.log('searchDateTimeToggle called.......');
-    this.search_date_time_flag = true;
-    setTimeout(() => this.initializingDatePicker(), 0);
+    this.service.edit_user(user_data).subscribe((data: any)=>{
+      if(data['status']){
+        this.notifyService.showSuccess(data['message'],'Notification');
+        user.value = '',
+        old_pass.value = '';
+        new_pass.value = '';
+        cnf_pass.value = '';
+      }
+      else{
+        this.notifyService.showSuccess(data['message'],'Notification');
+      }
+    },(error: any)=>{
+      this.notifyService.showError('Please check your Server', 'Server Connection Error');
+    });
   }
+
+  // searchDateTimeToggle(){
+  //   // console.log('searchDateTimeToggle called.......');
+  //   this.search_date_time_flag = true;
+  //   setTimeout(() => this.initializingDatePicker(), 0);
+  // }
 
   initializingDatePicker() {
     const startDateElement = document.getElementById('start-date') as HTMLInputElement;
@@ -315,6 +259,7 @@ export class DashboardComponent implements OnInit {
 
   }
 
+
   logout(){
     // sessionStorage.removeItem('isUserLoggedIn');
     // sessionStorage.removeItem('access_token');
@@ -322,15 +267,5 @@ export class DashboardComponent implements OnInit {
     sessionStorage.clear();
     this.router.navigate(['/login']);
   }
+
 }
-
-
-let report_page_table_data = [
-  {
-    'date_time': '27-02-2024 17:00',
-    'Job_id': 12345,
-    'actual_slab': 'AC56789LNB',
-    'detected_slab': 'AC56789LNB',
-    'mode': 'Auto'
-  }
-]

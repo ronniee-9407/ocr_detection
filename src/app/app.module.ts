@@ -11,12 +11,14 @@ import { FormsModule } from '@angular/forms';
 // import { NgxEchartsModule } from "ngx-echarts";
 // import { NgCircleProgressModule } from 'ng-circle-progress';
 import { ToastrModule } from 'ngx-toastr';
+import { SuperUserComponent } from './super-user/super-user.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    SuperUserComponent
   ],
   imports: [
     BrowserModule,

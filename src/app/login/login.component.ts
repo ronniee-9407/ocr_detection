@@ -10,6 +10,10 @@ import { NotificationService } from 'src/service/notification.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
+  user_type = ['super_user', 'dashboard'];
+  curr_user = this.user_type[0];
+
   constructor(
     private service: BackendService, 
     private sanitizer: DomSanitizer, 
@@ -21,6 +25,10 @@ export class LoginComponent implements OnInit {
     
   }
 
+  change_user(index: any){
+    this.curr_user = this.user_type[index];
+  }
+
   login(){
     let id = <HTMLInputElement> document.getElementById('userID');
     let userId = id.value;
@@ -29,28 +37,38 @@ export class LoginComponent implements OnInit {
 
     let login_data = {
       'userId': userId,
-      'password': password
+      'password': password,
+      'userType': this.curr_user
     };
     if(userId === '' || password === ''){
       this.notifyService.showWarning('Please enter UserID and Password','Notification');
       return;
     }
-    let login_flag = this.service.login(login_data);
-    if(login_flag){
-      sessionStorage.setItem('isUserLoggedIn', 'true');
-      this.router.navigate(['/dashboard']);
-    }else{
-      this.notifyService.showError('Invalid Login Credentials','Error !')
-    }
-    // this.service.login(login_data).subscribe((data: any)=>{
-    //   if(data['status']){
-    //     sessionStorage.setItem('isUserLoggedIn', 'true');
-    //     this.router.navigate(['/dashboard'])
-    //   }
-    // },(error: any) => {
-    //   this.notifyService.showError('Please check your Server', 'Server Connection Error');
-    // });
-    // sessionStorage.setItem('isUserLoggedIn', 'true');
-    // this.router.navigate(['/dashboard'])
+    // let login_flag = this.service.login(login_data);
+    // if(login_flag){
+    //   sessionStorage.setItem('isUserLoggedIn', 'true');
+    //   this.router.navigate(['/dashboard']);
+    // }else{
+    //   this.notifyService.showError('Invalid Login Credentials','Error !')
+    // }
+    this.service.login(login_data).subscribe((data: any)=>{
+      console.log('login data',data);
+      if(data['status']){
+        let access_token = data['access_token'];
+        sessionStorage.setItem('access_token', access_token);
+        sessionStorage.setItem('isUserLoggedIn', 'true');
+        sessionStorage.setItem('userType', this.curr_user);
+        this.router.navigate([this.curr_user])
+      }
+      else{
+        this.notifyService.showError('Invalid Login Credentials','Error !');
+        return;
+      }
+    },(error: any) => {
+      this.notifyService.showError('Please check your Server', 'Server Connection Error');
+    });
+    sessionStorage.setItem('isUserLoggedIn', 'true');
+    sessionStorage.setItem('userType', this.curr_user);
+    this.router.navigate([this.curr_user])
   }
 }

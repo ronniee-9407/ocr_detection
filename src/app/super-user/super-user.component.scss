@@ -140,7 +140,7 @@ body{
   height: 100%;
   width: 18%;
   // border: ridge;
-  // background-color: #060b27;
+  background-color: #060b27;
 }
 .right_container{
   height: 100%;
@@ -156,7 +156,7 @@ body{
   height: 10%;
   width: 94%;
   cursor: pointer;
-  margin: 8% 0% 0% 5%;
+  margin: 3%;
   border-radius: 12px;
 }
 .setting_options:hover{
@@ -178,6 +178,8 @@ body{
   text-align: center;
   margin: 10px;
   font-size: 22px;
+  position: relative;
+  top: 1%;
 }
 .input_class{
   height: 10%;
@@ -271,7 +273,9 @@ width: 100%;
 }
 
 .searchByDate{
-  position: relative;
+  position: absolute;
+  top: 20%;
+  left: 20%;
   border-radius: 20px;
   width: 60%;
   height: 65%;
@@ -333,13 +337,13 @@ width: 100%;
 #start-time:focus, #end-time:focus, #start-date:focus, #end-date:focus{
   outline: none;
 }
-.searchButton{
+#searchButton{
   position: relative;
   top: 50%;
   left: 47%;
   height: 10%;
   width: 12%;
-  background-color: #4e4e4e;
+  background-color: #0f123b;
   border: none;
   border-radius: 8px;
   color: white;
@@ -347,10 +351,9 @@ width: 100%;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-.searchButton:hover{
+#searchButton:hover{
   background-color: #000000de;
 }
-
 .manual_mode_active{
   height: 25%;
   width: 100%;
@@ -405,12 +408,10 @@ width: 100%;
   width: 34%;
   position: absolute;
   top: 56%;
-  left: 63.9%;
   background-color: rgba(226, 218, 218, 0.849);
   cursor: not-allowed;
   border-radius: 10px;
-} 
-
+}  
 .upper_container{
   height: 8%;
   width: 96%;
@@ -458,7 +459,6 @@ table tr:nth-child(even){background-color: #c8c4dbab;}
 // table tr:nth-child(even){color: white;}
 
 table tr:hover {background-color: #ddd; color: black;}
-
 
 
 
@@ -623,7 +623,7 @@ table tr:hover {background-color: #ddd; color: black;}
   .button::before {
     content: "";
     position: absolute;
-    background-color: #0f123b;
+    background-color: #00235d;
     width: 100%;
     height: 100%;
     // left: 0%;
@@ -633,7 +633,7 @@ table tr:hover {background-color: #ddd; color: black;}
   }
   
   .button svg {
-    fill: #0f123b;
+    fill: #00235d;
     transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
   }
   
