@@ -96,7 +96,7 @@ export class DashboardComponent implements OnInit {
     });
     this.socket.on('server_data', (data: any)=>{
       const jsonData = JSON.parse(data);
-      // console.log('socket called.......', jsonData['cam_status_1']);
+      console.log('socket called.......', jsonData);
       this.cam_status_1 = jsonData['cam_status_1'];
       this.cam_status_2 = jsonData['cam_status_2'];
       let frame_1 = 'data:image/jpg;base64,' + jsonData['image_1'];
