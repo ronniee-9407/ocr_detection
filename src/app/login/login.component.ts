@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
 
   user_type = ['super_user', 'dashboard'];
   curr_user = this.user_type[0];
+  view_password: boolean = false;
 
   constructor(
     private service: BackendService, 
@@ -27,6 +28,11 @@ export class LoginComponent implements OnInit {
 
   change_user(index: any){
     this.curr_user = this.user_type[index];
+    let id = <HTMLInputElement> document.getElementById('userID');
+    id.value = '';
+    let pass = <HTMLInputElement> document.getElementById('password');
+    pass.value = '';
+    this.view_password = false;
   }
 
   login(){
@@ -70,5 +76,19 @@ export class LoginComponent implements OnInit {
     sessionStorage.setItem('isUserLoggedIn', 'true');
     sessionStorage.setItem('userType', this.curr_user);
     this.router.navigate([this.curr_user])
+  }
+
+  show_password(){
+    let pass = <HTMLInputElement> document.getElementById('password');
+    let password = pass.value;
+    this.view_password = true;
+    pass.type = 'text';
+  }
+
+  close_password(){
+    let pass = <HTMLInputElement> document.getElementById('password');
+    let password = pass.value;
+    this.view_password = false;
+    pass.type = 'password';
   }
 }

@@ -5,6 +5,8 @@ import { BackendService } from 'src/service/backend.service';
 import { NotificationService } from 'src/service/notification.service';
 import { webSocket } from 'rxjs/webSocket';
 import Litepicker from 'litepicker';
+import { SocketIOService } from 'src/service/socket-io.service';
+import { io } from 'socket.io-client';
 
 @Component({
   selector: 'app-dashboard',
@@ -57,57 +59,132 @@ export class DashboardComponent implements OnInit {
   curr_settings_view = this.settings_view[0];
 
   manual_mode: boolean = false;
+  popup_flag: boolean = false;
+
+  slab_waiting_flag: boolean = false;
+  mode_select_flag: boolean = false;
+  slab_id_flag: boolean = false;
+  share_data_flag: boolean = false;
+  receive_data_flag: boolean = false;
+  data_stored_flag: boolean = false;
+  error_occured_flag: boolean = false;
+  messages: any = []
+  message_text: any;
+  socket: any;
+
+  
 
   constructor(
     private service: BackendService, 
     private sanitizer: DomSanitizer, 
     private router: Router, 
-    private notifyService: NotificationService, 
+    private notifyService: NotificationService,
+    private socketService: SocketIOService 
   ){}
 
   ngOnInit(): void {
-    // this.socketFeed();
+    this.socket_feed();
   }
 
-  socketFeed(){
-    let socket_url = "ws://192.168.68.165:5000/video_feed";
+  socket_feed(){
+    this.socket = io('http://192.168.68.111:5001');
+    this.socket.on('connect', ()=>{
+      console.log('Connected to server');
+    });
+    this.socket.on('server_message', (data: any)=>{
+      console.log('server_message called.......', data);
+    });
+    this.socket.on('server_data', (data: any)=>{
+      const jsonData = JSON.parse(data);
+      // console.log('socket called.......', jsonData['cam_status_1']);
+      this.cam_status_1 = jsonData['cam_status_1'];
+      this.cam_status_2 = jsonData['cam_status_2'];
+      let frame_1 = 'data:image/jpg;base64,' + jsonData['image_1'];
+      this.cam_feed_1 = this.sanitizer.bypassSecurityTrustUrl(frame_1);
+      let frame_2 = 'data:image/jpg;base64,' + jsonData['image_2'];
+      this.cam_feed_2 = this.sanitizer.bypassSecurityTrustUrl(frame_2);
+    });
+  }
+
+
+  // socketFeed(){
+  //   let socket_url = "ws://192.168.68.111:5001/video_feed";
+  //   let socket = webSocket(socket_url);
+  //   let socket_feed = socket.subscribe((data: any)=>{
+  //     // console.log('websocket data',data);
+  //     this.cam_status_1 = data['cam_status_1'];
+  //     this.cam_status_2 = data['cam_status_2'];
+  //     let frame_1 = 'data:image/jpg;base64,' + data['image_1'];
+  //     this.cam_feed_1 = this.sanitizer.bypassSecurityTrustUrl(frame_1);
+  //     let frame_2 = 'data:image/jpg;base64,' + data['image_2'];
+  //     this.cam_feed_2 = this.sanitizer.bypassSecurityTrustUrl(frame_2);
+      
+  //     this.live_table_data = data['live_table_data'];
+  //   })
+  // }
+
+
+  process_feed(){
+    let socket_url = "ws://127.0.0.1:5000/process_feed";
     let socket = webSocket(socket_url);
     let socket_feed = socket.subscribe((data: any)=>{
-      console.log('websocket data',data);
-
-      this.cam_status_1 = data['cam_status_1'];
-      this.cam_status_2 = data['cam_status_2'];
-      let frame_1 = 'data:image/jpg;base64,' + data['image_1'];
-      this.cam_feed_1 = this.sanitizer.bypassSecurityTrustUrl(frame_1);
-      let frame_2 = 'data:image/jpg;base64,' + data['image_2'];
-      this.cam_feed_2 = this.sanitizer.bypassSecurityTrustUrl(frame_2);
-      
-      this.live_table_data = data['live_table_data'];
+      console.log('process_feed data',data);
+      this.slab_waiting_flag = data['slab_waiting_flag'];
+      this.mode_select_flag = data['mode_select_flag'];
+      this.slab_id_flag = data['slab_id_flag'];
+      this.share_data_flag = data['share_data_flag'];
+      this.receive_data_flag = data['receive_data_flag'];
+      this.data_stored_flag = data['data_stored_flag']
     })
   }
 
-  change_mode(){
+  change_mode(flag: boolean){
+    this.popup_flag = false;
+    const checkbox = document.getElementById("checkbox_toggle") as HTMLInputElement;
+    if (!flag && !this.manual_mode) {    
+      checkbox.checked = false;
+      return;
+    }
+    else if(!flag && this.manual_mode){
+      checkbox.checked = true;
+      return;
+    }
     let curr_selected_mode = '';
-    if(this.manual_mode){
-      this.manual_mode = false;
-      curr_selected_mode = 'Auto';
-    }
-    else{
-      this.manual_mode = true; 
-      curr_selected_mode = 'Manual';
-    }
+    if (flag) {
+      
+      // if(this.manual_mode)
+      //   checkbox.checked = false;
+      // else
+      //   checkbox.checked = true;
 
-    let mode_send = {
-      'mode': curr_selected_mode
+      if(this.manual_mode){
+        this.manual_mode = false;
+        curr_selected_mode = 'Auto';
+        checkbox.checked = false;
+      }
+      else{
+        this.manual_mode = true; 
+        curr_selected_mode = 'Manual';
+        checkbox.checked = true;
+      }
+  
+      let mode_send = {
+        'mode': curr_selected_mode
+      }
+      
+      let input = <HTMLInputElement> document.getElementById('manual_slabId');
+      input.value = '';
+      console.log('manual mode', this.manual_mode);
+      this.service.select_mode(mode_send).subscribe((data: any)=>{
+        if(data['status'])
+          this.notifyService.showInfo(data['message'],'Notification');
+      },(error: any)=>{
+        this.notifyService.showError('Please check your Server', 'Server Connection Error');
+      });
     }
-
-    this.service.select_mode(mode_send).subscribe((data: any)=>{
-      if(data['status'])
-        this.notifyService.showInfo(data['message'],'Notification');
-    },(error: any)=>{
-      this.notifyService.showError('Please check your Server', 'Server Connection Error');
-    });
+    
   }
+
 
   submitSlabId(){
     console.log('submitSlabId called.....');
@@ -118,6 +195,7 @@ export class DashboardComponent implements OnInit {
     }
     this.service.manual_slabID(slab_id).subscribe((data :any)=>{
       console.log('manual_slabID',data);
+  this.notifyService.showInfo('Slab ID '+data['slab_number'] + ' sent successfully','Notigication');
     },(error: any)=>{
       this.notifyService.showError('Please check your Server', 'Server Connection Error');
     });
@@ -133,6 +211,7 @@ export class DashboardComponent implements OnInit {
     // }
     this.curr_view = this.view_list[index];
     this.curr_body = this.view_list[index];
+   
   }
 
   changeSettingView(index: any){

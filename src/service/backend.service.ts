@@ -21,43 +21,43 @@ export class BackendService {
   // }
 
   login(login_data: any): Observable<any>{
-    return this.http.post("http://192.168.68.165:5000/login",{"login_data": login_data, withCredentials: true});
+    return this.http.post("http://192.168.68.111:5001/login",{"login_data": login_data, withCredentials: true});
   }
 
   add_camera(camDetails: any): Observable<any>{
-    return this.http.post("http://192.168.68.165:5000/add_cam",{"camDetails": camDetails, withCredentials: true});
+    return this.http.post("http://192.168.68.111:5001/add_cam",{"camDetails": camDetails, withCredentials: true});
   }
 
   add_DB(dbDetails: any): Observable<any>{
-    return this.http.post("http://192.168.68.165:5000/add_db",{"dbDetails": dbDetails, withCredentials: true});
+    return this.http.post("http://192.168.68.111:5001/add_db",{"dbDetails": dbDetails, withCredentials: true});
   }
 
-  add_PLC(plcDetails: any): Observable<any>{
-    return this.http.post("http://192.168.68.165:5000/add_plc",{"plcDetails": plcDetails, withCredentials: true});
-  }
+  // add_PLC(plcDetails: any): Observable<any>{
+  //   return this.http.post("http://192.168.68.111:5001/add_plc",{"plcDetails": plcDetails, withCredentials: true});
+  // }
 
   get_report_page_dashboard_data(): Observable<any>{
-    return this.http.get("http://192.168.68.165:5000/report_dashboard_data");
+    return this.http.get("http://192.168.68.111:5001/report_dashboard_data");
   }
 
   add_user(user_data: any): Observable<any>{
-    return this.http.post("http://192.168.68.165:5000/add_user",{"user_data": user_data, withCredentials: true});
+    return this.http.post("http://192.168.68.111:5001/users",{"user_data": user_data, withCredentials: true});
   }
 
   edit_user(user_data: any): Observable<any>{
-    return this.http.post("http://192.168.68.165:5000/edit_user",{"user_data": user_data, withCredentials: true});
+    return this.http.post("http://192.168.68.111:5001/edit_user",{"user_data": user_data, withCredentials: true});
   }
 
   select_mode(curr_mode: any): Observable<any>{
-    return this.http.post("http://192.168.68.165:5000/change_mode",{"curr_mode": curr_mode, withCredentials: true});
+    return this.http.post("http://192.168.68.111:5001/change_mode",{"curr_mode": curr_mode, withCredentials: true});
   }
 
   manual_slabID(slab_id: any): Observable<any>{
-    return this.http.post("http://192.168.68.165:5000/manual_slab_entry",{"slab_id": slab_id, withCredentials: true});
+    return this.http.post("http://192.168.68.111:5001/manual_slab_entry",{"slab_id": slab_id, withCredentials: true});
   }
 
   searchDateTime(start_date: any, end_date: any): Observable<any>{
-    return this.http.post("http://192.168.68.165:5000/search_date_time",{"start_date": start_date, "end_date": end_date, withCredentials: true});
+    return this.http.post("http://192.168.68.111:5001/search_date_time",{"start_date": start_date, "end_date": end_date, withCredentials: true});
   }
 
 }

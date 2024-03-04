@@ -24,26 +24,65 @@
     </div>
 
     <div class="table_full_container flex-row-even">
-        <div class="table_container">
-            <div class="table_head white_text">
-                <h3>Current Slab</h3>
-                <h3 style="position: relative; right: 2%;">Mode</h3>
-                <h3 style="position: relative; right: 2%;">Result</h3>
-            </div>
-            <div class="table_body">
-                <div class="table_row white_text" *ngFor="let item of live_table_data">
-                    <div class="table_cell">{{ item.curr_slab }}</div>
-                    <div class="table_cell">{{ item.mode }}</div>
-                    <div class="table_cell">{{ item.status ? 'True' : 'False' }}</div>
+        <div class="table_container flex-col-even">
+            <div class="flow_icon_container flex-row-even">
+                <div *ngIf="!slab_waiting_flag" class="wrapper flex-col-even Opacity_1">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+                <div *ngIf="slab_waiting_flag" class="wrapper flex-col-even fade-in">
+                    <img src="../../assets/icons/steel.png" alt="" class="icon_img">
+                </div>
+                <img [ngClass]="mode_select_flag ? 'icon_class fade-in' : 'icon_class Opacity'" src="../../assets/icons/right-arrow.png" alt="" >
+                <div [ngClass]="mode_select_flag ? 'wrapper fade-in flex-col-even' : 'wrapper Opacity flex-col-even'">
+                    <img *ngIf="manual_mode" src="../../assets/icons/gear.png" alt="" class="icon_img">
+                    <img *ngIf="!manual_mode" src="../../assets/icons/running.png" alt="" class="icon_img">
+                </div>
+                <img [ngClass]="slab_id_flag ? 'icon_class fade-in' : 'icon_class Opacity'" src="../../assets/icons/right-arrow.png" alt="">
+                <div [ngClass]="slab_id_flag ? 'wrapper fade-in flex-col-even' : 'wrapper Opacity flex-col-even'">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+                <img [ngClass]="share_data_flag ? 'icon_class fade-in' : 'icon_class Opacity'" src="../../assets/icons/right-arrow.png" alt="">
+                <div [ngClass]="share_data_flag ? 'wrapper fade-in flex-col-even' : 'wrapper Opacity flex-col-even'">
+                    <img src="../../assets/icons/data-transfer.png" alt="" class="icon_img">
+                </div>
+                <img [ngClass]="receive_data_flag ? 'icon_class fade-in' : 'icon_class Opacity'" src="../../assets/icons/right-arrow.png" alt="">
+                <div [ngClass]="receive_data_flag ? 'wrapper fade-in flex-col-even' : 'wrapper Opacity flex-col-even'">
+                    <img src="../../assets/icons/data_sent.png" alt="" class="icon_img">
+                </div>
+                <img [ngClass]="data_stored_flag ? 'icon_class fade-in' : 'icon_class Opacity'" src="../../assets/icons/right-arrow.png" alt="">
+                <div [ngClass]="data_stored_flag ? 'wrapper fade-in flex-col-even' : 'wrapper Opacity flex-col-even'">
+                    <img src="../../assets/icons/database.png" alt="" class="icon_img">
+
                 </div>
             </div>
-        </div>
-        <!-- <div class="table_container">
+            <div class="flow_text_container flex-row-even">
+                <p *ngIf="!slab_waiting_flag" class="Opacity_1" style="position: relative; right: 5%;">Waiting for Slab</p>
+                <p *ngIf="slab_waiting_flag" class="fade-in" style="position: relative; right: 5%;">Slab Entered</p>
 
-        </div> -->
+                <p *ngIf="!manual_mode && !mode_select_flag" class="Opacity" style="position: relative; right: 1%;">Auto Mode</p>
+                <p *ngIf="!manual_mode && mode_select_flag" class="fade-in" style="position: relative; right: 0%;">Auto Mode</p>
+                <p *ngIf="manual_mode && !mode_select_flag" class="Opacity" style="position: relative; right: 2%;">Manual Mode</p>
+                <p *ngIf="manual_mode && mode_select_flag" class="fade-in" style="position: relative; right: 1%;">Manual Mode</p>
+
+                <p *ngIf="!manual_mode && !slab_id_flag" class="Opacity" style="position: relative; left: 3.5%;">Detecting Slab ID</p>
+                <p *ngIf="!manual_mode && slab_id_flag" class="fade-in" style="position: relative; left: 3.5%;">Detecting Slab ID</p>
+                <p *ngIf="manual_mode && !slab_id_flag" class="Opacity" style="position: relative; left: 3%;">Enter Slab ID</p>
+                <p *ngIf="manual_mode && slab_id_flag" class="fade-in" style="position: relative; left: 3%;">Enter Slab ID</p>
+
+                <p [ngClass]="share_data_flag ? 'fade-in' : 'Opacity'" style="position: relative; left: 5%;">Share data to L3</p>
+                <p [ngClass]="receive_data_flag ? 'fade-in' : 'Opacity'" style="position: relative; left: 4.5%;">Received Remarks from L3</p>
+                <p [ngClass]="data_stored_flag ? 'fade-in' : 'Opacity'" style="position: relative; left: 4%;">Data stored</p>
+            </div>
+
+        </div>
+
         <div class="mode_selector flex-col-even">
             <input id="checkbox_toggle" type="checkbox" class="check">
-            <div class="checkbox" (click)="change_mode()">
+            <div class="checkbox" (click)="(popup_flag = true)">
               <label class="slide" for="checkbox_toggle">
                 <label class="toggle flex-col-even" for="checkbox_toggle">
                     <p *ngIf="!manual_mode"><b>AUTO</b></p>
@@ -52,12 +91,30 @@
               </label>
             </div>
             
-            <div class="manual_mode_active flex-row-even" [ngClass]="manual_mode ? 'manual_mode_active flex-row-even' : 'manual_mode_active_blur flex-row-even'">
+            <!-- <div [ngClass]="manual_mode ? 'manual_mode_active flex-row-even' : 'manual_mode_active_blur flex-row-even'">
                 <p>Slab ID :</p>
                 <input type="text" id="manual_slabId" [readonly]="!manual_mode">
                 <button type="button" (click)="manual_mode ? submitSlabId() : null">Submit</button>
             </div>
-            <div *ngIf="!manual_mode" class="blur"></div>
+            <div *ngIf="!manual_mode" class="blur"></div> -->
+
+            <div *ngIf="manual_mode" class="manual_mode_active flex-row-even">
+                <p>Slab ID :</p>
+                <input type="text" id="manual_slabId" [readonly]="!manual_mode">
+                <button type="button" (click)="manual_mode ? submitSlabId() : null">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="popup_flag" class="overlay">
+        <div class="warningContainer flex-col-even">
+            <div class="warning_inner_container flex-col-even">
+                <h1>Do you really want to change the Mode ?</h1>
+            </div>
+            <div class="warning_inner_container flex-row-even">
+                <button class="btnSize bg-color_green" (click)="change_mode(true)">Yes</button>
+                <button class="btnSize bg-color_red" (click)="change_mode(false)">No</button>
+            </div>
         </div>
     </div>
 
@@ -180,8 +237,8 @@
 <body *ngIf="curr_body == 'Report'">
     <img src="../../assets/icons/background_img.png" alt="" class="full">
     <img src="../../assets/icons/blue_img_full.png" alt="" class="blur_img_class">
-    <div class="header_class flex-row-even shadow">
-        <img src="../../assets/icons/logo.png" alt="" class="logo_class">
+    <div class="header_class_report flex-row-even shadow">
+        <img src="../../assets/icons/logo.png" alt="" class="logo_class_header">
         <ul class="header_options flex-row-even"> 
             <button *ngIf ="curr_view == 'Dashboard'" class="header_btn white_text active">Dashboard</button>
             <button *ngIf ="curr_view != 'Dashboard'" class="header_btn white_text" (click)="changeView(0)">Dashboard</button>

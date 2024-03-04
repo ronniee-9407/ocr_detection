@@ -31,5 +31,9 @@
             <br><br>
             <button type="submit" class="login_btn" (click)="login()">Submit</button>
         </div>
+        <div class="show_hide flex-col-even">
+            <img *ngIf="!view_password" src="../../assets/icons/visual.png" alt="" class="viewPasswordClass" (click)="show_password()">
+            <img *ngIf="view_password" src="../../assets/icons/close-eye.png" alt="" class="viewPasswordClass" (click)="close_password()">
+        </div>
     </div>
 </body>

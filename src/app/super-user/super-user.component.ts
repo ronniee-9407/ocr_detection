@@ -141,7 +141,7 @@ export class SuperUserComponent implements OnInit {
     this.service.add_user(user_data).subscribe((data: any)=>{
       console.log('add_user',data);
       if(data['status']){
-        this.notifyService.showSuccess('User added successfully','Notification');
+        this.notifyService.showSuccess(data['message'],'Notification');
         name.value = '';
         userId.value = '';
         pass.value = '';
@@ -190,7 +190,7 @@ export class SuperUserComponent implements OnInit {
         cnf_pass.value = '';
       }
       else{
-        this.notifyService.showSuccess(data['message'],'Notification');
+        this.notifyService.showError(data['error'],'Notification');
       }
     },(error: any)=>{
       this.notifyService.showError('Please check your Server', 'Server Connection Error');
@@ -215,7 +215,7 @@ export class SuperUserComponent implements OnInit {
       });
     } 
     else{
-      // console.log('Litepicker not initialised........');
+      console.log('Litepicker not initialised........');
     }
   }
 
