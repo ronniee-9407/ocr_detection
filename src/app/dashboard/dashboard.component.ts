@@ -83,11 +83,13 @@ export class DashboardComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
-    this.socket_feed();
+    // this.socket_feed();
+    this.socketFeed();
+    this.process_feed();
   }
 
   socket_feed(){
-    this.socket = io('http://192.168.68.111:5001');
+    this.socket = io('http://192.168.68.111:5000');
     this.socket.on('connect', ()=>{
       console.log('Connected to server');
     });
@@ -96,7 +98,7 @@ export class DashboardComponent implements OnInit {
     });
     this.socket.on('server_data', (data: any)=>{
       const jsonData = JSON.parse(data);
-      console.log('socket called.......', jsonData);
+      // console.log('socket called.......', jsonData);
       this.cam_status_1 = jsonData['cam_status_1'];
       this.cam_status_2 = jsonData['cam_status_2'];
       let frame_1 = 'data:image/jpg;base64,' + jsonData['image_1'];
@@ -104,28 +106,39 @@ export class DashboardComponent implements OnInit {
       let frame_2 = 'data:image/jpg;base64,' + jsonData['image_2'];
       this.cam_feed_2 = this.sanitizer.bypassSecurityTrustUrl(frame_2);
     });
+    this.socket.on('process_data', (jsonData: any)=>{
+      // console.log('process_data called.......', jsonData);
+      const data = JSON.parse(jsonData);
+      this.slab_waiting_flag = data['slab_waiting_flag'];
+      this.mode_select_flag = data['mode_select_flag'];
+      this.slab_id_flag = data['slab_id_flag'];
+      this.share_data_flag = data['share_data_flag'];
+      this.receive_data_flag = data['receive_data_flag'];
+      this.data_stored_flag = data['data_stored_flag']
+    });
   }
 
 
-  // socketFeed(){
-  //   let socket_url = "ws://192.168.68.111:5001/video_feed";
-  //   let socket = webSocket(socket_url);
-  //   let socket_feed = socket.subscribe((data: any)=>{
-  //     // console.log('websocket data',data);
-  //     this.cam_status_1 = data['cam_status_1'];
-  //     this.cam_status_2 = data['cam_status_2'];
-  //     let frame_1 = 'data:image/jpg;base64,' + data['image_1'];
-  //     this.cam_feed_1 = this.sanitizer.bypassSecurityTrustUrl(frame_1);
-  //     let frame_2 = 'data:image/jpg;base64,' + data['image_2'];
-  //     this.cam_feed_2 = this.sanitizer.bypassSecurityTrustUrl(frame_2);
+  socketFeed(){
+    console.log('Socket called............');
+    let socket_url = "ws://192.168.68.111:5000/video_feed";
+    let socket = webSocket(socket_url);
+    let socket_feed = socket.subscribe((data: any)=>{
+      // console.log('websocket data',data);
+      this.cam_status_1 = data['cam_status_1'];
+      this.cam_status_2 = data['cam_status_2'];
+      let frame_1 = 'data:image/jpg;base64,' + data['image_1'];
+      this.cam_feed_1 = this.sanitizer.bypassSecurityTrustUrl(frame_1);
+      let frame_2 = 'data:image/jpg;base64,' + data['image_2'];
+      this.cam_feed_2 = this.sanitizer.bypassSecurityTrustUrl(frame_2);
       
-  //     this.live_table_data = data['live_table_data'];
-  //   })
-  // }
+      this.live_table_data = data['live_table_data'];
+    })
+  }
 
 
   process_feed(){
-    let socket_url = "ws://127.0.0.1:5000/process_feed";
+    let socket_url = "ws://192.168.68.111:5000/process_feed";
     let socket = webSocket(socket_url);
     let socket_feed = socket.subscribe((data: any)=>{
       console.log('process_feed data',data);
@@ -172,12 +185,9 @@ export class DashboardComponent implements OnInit {
         'mode': curr_selected_mode
       }
       
-      let input = <HTMLInputElement> document.getElementById('manual_slabId');
-      input.value = '';
-      console.log('manual mode', this.manual_mode);
       this.service.select_mode(mode_send).subscribe((data: any)=>{
         if(data['status'])
-          this.notifyService.showInfo(data['message'],'Notification');
+          this.notifyService.showInfo(data['Message'],'Notification');
       },(error: any)=>{
         this.notifyService.showError('Please check your Server', 'Server Connection Error');
       });

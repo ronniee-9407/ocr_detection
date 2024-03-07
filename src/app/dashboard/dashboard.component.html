@@ -69,9 +69,9 @@
                 <p *ngIf="manual_mode && mode_select_flag" class="fade-in" style="position: relative; right: 1%;">Manual Mode</p>
 
                 <p *ngIf="!manual_mode && !slab_id_flag" class="Opacity" style="position: relative; left: 3.5%;">Detecting Slab ID</p>
-                <p *ngIf="!manual_mode && slab_id_flag" class="fade-in" style="position: relative; left: 3.5%;">Detecting Slab ID</p>
+                <p *ngIf="!manual_mode && slab_id_flag" class="fade-in" style="position: relative; left: 3.5%;">Slab ID Detected</p>
                 <p *ngIf="manual_mode && !slab_id_flag" class="Opacity" style="position: relative; left: 3%;">Enter Slab ID</p>
-                <p *ngIf="manual_mode && slab_id_flag" class="fade-in" style="position: relative; left: 3%;">Enter Slab ID</p>
+                <p *ngIf="manual_mode && slab_id_flag" class="fade-in" style="position: relative; left: 3%;">Slab ID Entered</p>
 
                 <p [ngClass]="share_data_flag ? 'fade-in' : 'Opacity'" style="position: relative; left: 5%;">Share data to L3</p>
                 <p [ngClass]="receive_data_flag ? 'fade-in' : 'Opacity'" style="position: relative; left: 4.5%;">Received Remarks from L3</p>
