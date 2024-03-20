@@ -1,12 +1,16 @@
 {
   "name": "ocr-detection",
   "version": "0.0.0",
+  "main": "main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build-prod": "ng build --configuration production",
+    "electron-build": "ng build --base-href ./ && electron .",
+    "package": "ng build --base-href ./ && electron-packager . OCR_Detection --overwrite  --platform=win32 --arch=x64 --icon=src/assets/icons/icon_app.ico --asar --prune=true --out=release-builds --version-string.CompanyName=Deevia Software Pvt. Ltd. "
   },
   "private": true,
   "dependencies": {
@@ -19,6 +23,8 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "@types/socket.io-client": "^3.0.0",
+    "electron": "^29.1.4",
+    "electron-packager": "^17.1.2",
     "litepicker": "^2.0.12",
     "ngx-toastr": "^18.0.0",
     "rxjs": "~7.8.0",

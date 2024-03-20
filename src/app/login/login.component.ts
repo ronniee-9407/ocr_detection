@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
     let login_data = {
       'userId': userId,
       'password': password,
-      'userType': this.curr_user
+      'userType': 'User'
     };
     if(userId === '' || password === ''){
       this.notifyService.showWarning('Please enter UserID and Password','Notification');
@@ -57,6 +57,7 @@ export class LoginComponent implements OnInit {
     // }else{
     //   this.notifyService.showError('Invalid Login Credentials','Error !')
     // }
+    console.log('sending login data', login_data);
     this.service.login(login_data).subscribe((data: any)=>{
       console.log('login data',data);
       if(data['status']){

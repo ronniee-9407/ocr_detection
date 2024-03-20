@@ -5,7 +5,6 @@ import { BackendService } from 'src/service/backend.service';
 import { NotificationService } from 'src/service/notification.service';
 import { webSocket } from 'rxjs/webSocket';
 import Litepicker from 'litepicker';
-import { SocketIOService } from 'src/service/socket-io.service';
 import { io } from 'socket.io-client';
 
 @Component({
@@ -72,24 +71,21 @@ export class DashboardComponent implements OnInit {
   message_text: any;
   socket: any;
 
-  
-
   constructor(
     private service: BackendService, 
     private sanitizer: DomSanitizer, 
     private router: Router, 
-    private notifyService: NotificationService,
-    private socketService: SocketIOService 
+    private notifyService: NotificationService
   ){}
 
   ngOnInit(): void {
-    // this.socket_feed();
-    this.socketFeed();
-    this.process_feed();
+    this.socket_feed();
+    // this.socketFeed();
+    // this.process_feed();
   }
 
   socket_feed(){
-    this.socket = io('http://192.168.68.111:5000');
+    this.socket = io('http://192.168.1.186:5008');
     this.socket.on('connect', ()=>{
       console.log('Connected to server');
     });
@@ -98,7 +94,7 @@ export class DashboardComponent implements OnInit {
     });
     this.socket.on('server_data', (data: any)=>{
       const jsonData = JSON.parse(data);
-      // console.log('socket called.......', jsonData);
+      console.log('socket called.......', jsonData);
       this.cam_status_1 = jsonData['cam_status_1'];
       this.cam_status_2 = jsonData['cam_status_2'];
       let frame_1 = 'data:image/jpg;base64,' + jsonData['image_1'];
@@ -118,10 +114,9 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-
   socketFeed(){
-    console.log('Socket called............');
-    let socket_url = "ws://192.168.68.111:5000/video_feed";
+    // console.log('Socket called............');
+    let socket_url = "ws://127.0.0.1:5000/video_feed";
     let socket = webSocket(socket_url);
     let socket_feed = socket.subscribe((data: any)=>{
       // console.log('websocket data',data);
@@ -136,12 +131,11 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-
   process_feed(){
-    let socket_url = "ws://192.168.68.111:5000/process_feed";
+    let socket_url = "ws://127.0.0.1:5000/process_feed";
     let socket = webSocket(socket_url);
     let socket_feed = socket.subscribe((data: any)=>{
-      console.log('process_feed data',data);
+      // console.log('process_feed data',data);
       this.slab_waiting_flag = data['slab_waiting_flag'];
       this.mode_select_flag = data['mode_select_flag'];
       this.slab_id_flag = data['slab_id_flag'];
@@ -164,12 +158,6 @@ export class DashboardComponent implements OnInit {
     }
     let curr_selected_mode = '';
     if (flag) {
-      
-      // if(this.manual_mode)
-      //   checkbox.checked = false;
-      // else
-      //   checkbox.checked = true;
-
       if(this.manual_mode){
         this.manual_mode = false;
         curr_selected_mode = 'Auto';
@@ -184,44 +172,33 @@ export class DashboardComponent implements OnInit {
       let mode_send = {
         'mode': curr_selected_mode
       }
-      
       this.service.select_mode(mode_send).subscribe((data: any)=>{
         if(data['status'])
           this.notifyService.showInfo(data['Message'],'Notification');
       },(error: any)=>{
         this.notifyService.showError('Please check your Server', 'Server Connection Error');
       });
-    }
-    
+    } 
   }
 
-
   submitSlabId(){
-    console.log('submitSlabId called.....');
+    // console.log('submitSlabId called.....');
     let slab = <HTMLInputElement> document.getElementById('manual_slabId');
     let slab_id = slab.value;
     if(slab_id == ''){
       this.notifyService.showWarning('⚠ All inputs are required','Notification');
     }
     this.service.manual_slabID(slab_id).subscribe((data :any)=>{
-      console.log('manual_slabID',data);
-  this.notifyService.showInfo('Slab ID '+data['slab_number'] + ' sent successfully','Notigication');
-    },(error: any)=>{
-      this.notifyService.showError('Please check your Server', 'Server Connection Error');
-    });
-  }
+      // console.log('manual_slabID',data);
+      this.notifyService.showInfo('Slab ID '+data['slab_number'] + ' sent successfully','Notification');
+      },(error: any)=>{
+        this.notifyService.showError('Please check your Server', 'Server Connection Error');
+      });
+    }
 
   changeView(index: any){
-    // if(index == 2){
-    //   this.service.get_report_page_dashboard_data().subscribe((data: any)=>{
-    //     console.log('get_report_page_dashboard_data',data); 
-    //   },(error: any)=>{
-    //     this.notifyService.showError('Please check your Server', 'Server Connection Error');
-    //   });
-    // }
     this.curr_view = this.view_list[index];
     this.curr_body = this.view_list[index];
-   
   }
 
   changeSettingView(index: any){
@@ -405,14 +382,10 @@ export class DashboardComponent implements OnInit {
   }
 
   logout(){
-    // sessionStorage.removeItem('isUserLoggedIn');
-    // sessionStorage.removeItem('access_token');
-    // sessionStorage.removeItem('userType');
     sessionStorage.clear();
     this.router.navigate(['/login']);
   }
 }
-
 
 let report_page_table_data = [
   {
