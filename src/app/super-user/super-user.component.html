@@ -1,0 +1,160 @@
+<body *ngIf="curr_body == 'Dashboard'">
+    <img src="../../assets/icons/background_img.png" alt="" class="full">
+    <img src="../../assets/icons/blue_img_full.png" alt="" class="blur_img_class">
+    <div class="header_class flex-row-even shadow">
+        <img src="../../assets/icons/logo.png" alt="" class="logo_class">
+        <ul class="header_options flex-row-even"> 
+            <button *ngIf ="curr_view == 'Dashboard'" class="header_btn white_text active">Dashboard</button>
+            <button *ngIf ="curr_view != 'Dashboard'" class="header_btn white_text" (click)="changeView(0)">Dashboard</button>
+            <button *ngIf ="curr_view == 'Settings'" class="header_btn white_text active">Settings</button>
+            <button *ngIf ="curr_view != 'Settings'" class="header_btn white_text" (click)="changeView(1)">Settings</button>
+            <!-- <button *ngIf ="curr_view == 'Report'" class="header_btn white_text active">Report</button>
+            <button *ngIf ="curr_view != 'Report'" class="header_btn white_text" (click)="changeView(2)">Report</button> -->
+        </ul>
+        <button class="Btn" (click)="logout()">
+            <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
+            <div class="text">Logout</div>
+        </button>
+    </div>
+
+    <div class="setting_class flex-col-even">
+        <div class="report_chart_container flex-row-even">
+            <div class="chart_container shadow" id="chart1"></div>
+            <div class="chart_container shadow" id="chart2"></div>
+        </div>
+        <div class="report_table_container flex-col-even">
+            <div class="table_container_class shadow">
+                <div class="table_head white_text">
+                    <h3 style="position: relative; left: 3%;">Date/Time</h3>
+                    <h3 style="position: relative; left: 6%;">Job ID</h3>
+                    <h3 style="position: relative; left: 5%;">Current Slab</h3>
+                    <h3 style="position: relative; left: 1%;">Actual Slab</h3>
+                    <h3 style="position: relative; left: 0%;">Result</h3>
+                </div>
+                <div class="table_body">
+                    <div class="table_row white_text" *ngFor="let item of report_table_data_dashboard">
+                        <div class="table_cell">{{ item.Date_time }}</div>
+                        <div class="table_cell">{{ item.jobID }}</div>
+                        <div class="table_cell">{{ item.curr_slab }}</div>
+                        <div class="table_cell">{{ item.actual_slab }}</div>
+                        <div class="table_cell">{{ item.status ? 'True' : 'False' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<body *ngIf="curr_body == 'Settings'">
+    <img src="../../assets/icons/background_img.png" alt="" class="full">
+    <img src="../../assets/icons/blue_img_full.png" alt="" class="blur_img_class">
+    <div class="header_class flex-row-even shadow">
+        <img src="../../assets/icons/logo.png" alt="" class="logo_class">
+        <ul class="header_options flex-row-even"> 
+            <button *ngIf ="curr_view == 'Dashboard'" class="header_btn white_text active">Dashboard</button>
+            <button *ngIf ="curr_view != 'Dashboard'" class="header_btn white_text" (click)="changeView(0)">Dashboard</button>
+            <button *ngIf ="curr_view == 'Settings'" class="header_btn white_text active">Settings</button>
+            <button *ngIf ="curr_view != 'Settings'" class="header_btn white_text" (click)="changeView(1)">Settings</button>
+            <!-- <button *ngIf ="curr_view == 'Report'" class="header_btn white_text active">Report</button>
+            <button *ngIf ="curr_view != 'Report'" class="header_btn white_text" (click)="changeView(2)">Report</button> -->
+        </ul>
+        <button class="Btn" (click)="logout()">
+            <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
+            <div class="text">Logout</div>
+        </button>
+    </div>
+    <div class="setting_class flex-row-even">
+        <div class="left_container shadow">
+            <div *ngFor="let item of settings_view; let i = index" [ngClass]="curr_settings_view === item ? 'white_text setting_options flex-row-even shadow' : 'white_text setting_options flex-row-even'" (click)="changeSettingView(i)">
+                <img [src]="'../../assets/icons/' + setting_icon_list[i]" alt="" class="setting_icon_class">
+                <h3 class="setting_options_header">{{item}} Setting</h3>
+            </div>
+        </div>
+        <div *ngIf="curr_settings_view == 'Camera'" class="right_container flex-row-even">
+            <div class="cam_details shadow flex-col-even">
+                <h2 class="cam_heading white_text">Enter Camera 1 Details</h2><br>
+                <label for="cam_ip1" class="white_text label_class">Camera IP :</label>
+                <br>
+                <input type="text" class="input_class" id="camIP1" placeholder="192.168.x.x">
+                
+                <label for="user_id1" class="white_text label_class">User ID :</label>
+                <br>
+                <input type="text" class="input_class" id="userID1" placeholder="Enter User Id">
+                
+                <label for="password1" class="white_text label_class">Password :</label>
+                <br>
+                <input type="password" class="input_class" id="password1" placeholder="Password">
+                
+                <label for="port1" class="white_text label_class">Port :</label>
+                <br>
+                <input type="text" class="input_class" id="port1" value="554" placeholder="port" style="cursor: not-allowed;" readonly>
+                <br>
+                <button type="submit" class="login_btn" (click)="addCam('Cam1')" (keydown.enter)="addCam('Cam1')">Submit</button>
+            </div>
+            <div class="cam_details shadow flex-col-even">
+                <h2 class="cam_heading white_text">Enter Camera 2 Details</h2><br>
+                <label for="cam_ip2" class="white_text label_class">Camera IP :</label>
+                <br>
+                <input type="text" class="input_class" id="camIP2" placeholder="192.168.x.x">
+                
+                <label for="user_id2" class="white_text label_class">User ID :</label>
+                <br>
+                <input type="text" class="input_class" id="userID2" placeholder="User ID">
+                
+                <label for="password2" class="white_text label_class">Password :</label>
+                <br>
+                <input type="password" class="input_class" id="password2" placeholder="Password">
+                
+                <label for="port2" class="white_text label_class">Port :</label>
+                <br>
+                <input type="text" class="input_class" id="port2" value="554" placeholder="port" style="cursor: not-allowed;" readonly>
+                <br>
+                <button type="submit" class="login_btn" (click)="addCam('Cam2')" (keydown.enter)="addCam('Cam2')">Submit</button>
+            </div>
+        </div>
+
+        <div *ngIf="curr_settings_view == 'User'" class="right_container flex-row-even">
+            <div class="cam_details shadow flex-col-even">
+                <h2 class="cam_heading white_text">Add New User</h2><br>
+                <label for="new_username" class="white_text label_class">User Name :</label>
+                <br>
+                <input type="text" class="input_class" id="new_username" placeholder="User Name">
+                
+                <label for="new_user_id" class="white_text label_class">User ID :</label>
+                <br>
+                <input type="text" class="input_class" id="new_user_id" placeholder="User ID">
+                
+                <label for="new_password" class="white_text label_class">Password :</label>
+                <br>
+                <input type="password" class="input_class" id="new_password" placeholder="Password">
+                
+                <label for="cnf_new_password" class="white_text label_class">Confirm Password :</label>
+                <br>
+                <input type="text" class="input_class" id="cnf_new_password" placeholder="Confirm Password">
+                <br>
+                <button type="submit" class="login_btn" (click)="addUser()" (keydown.enter)="addUser()">Submit</button>
+            </div>
+            <div class="cam_details shadow flex-col-even">
+                <h2 class="cam_heading white_text">Edit User Password</h2><br>
+                <label for="edit_user" class="white_text label_class">User ID :</label>
+                <br>
+                <input type="text" class="input_class" id="edit_user" placeholder="User ID">
+                
+                <label for="old_password" class="white_text label_class">Old Password :</label>
+                <br>
+                <input type="text" class="input_class" id="old_password" placeholder="Old Password">
+                
+                <label for="new_edit_password" class="white_text label_class">New Password :</label>
+                <br>
+                <input type="password" class="input_class" id="new_edit_password" placeholder="New Password">
+                
+                <label for="cnf_edit_password" class="white_text label_class">Confirm Password :</label>
+                <br>
+                <input type="text" class="input_class" id="cnf_edit_password" placeholder="Confirm Password">
+                <br>
+                <button type="submit" class="login_btn" (click)="editUser()" (keydown.enter)="editUser()">Submit</button>
+            </div>
+        </div>
+    </div>
+</body>
+

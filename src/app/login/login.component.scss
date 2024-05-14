@@ -1,0 +1,228 @@
+body{
+    position: absolute;
+    right: 0%;
+    // bottom: 0%;
+    top: 0%;
+    height: 99.45%;
+    width: 100%;
+    // border: 1px solid black;
+    margin: 0px;
+    padding: 0px;
+}
+.welcomeClass{
+    position: relative;
+    height: 100%;
+    width: 50%;
+}
+.login_form{
+    height: 100%;
+    width: 50%;
+}
+.full{
+    height: 100%;
+    width: 100%;
+}
+.white_text{
+    color: white;
+    font-family: "Inria Sans", sans-serif;
+}
+.login_header{
+    height: 10%;
+    width: 36%;
+    position: absolute;
+    left: 57%;
+    top: 5%;
+    border: ridge;
+    border-radius: 10px;
+    background-color: #202247;
+}
+.logo_class{
+    height: 80%;
+    width: 40%;
+}
+.login_from_container{
+    position: absolute;
+    top: 30%;
+    left: 60%;
+    height: 55%;
+    width: 30%;
+    // border: ridge;
+}
+// .login_input_container{
+//     height: 20%;
+//     width: 70%;
+// }
+.show_hide{
+    height: 7%;
+    width: 5%;
+    position: absolute;
+    top: 63%;
+    left: 81%;
+}
+.viewPasswordClass{
+    height: 50%;
+    width: 35%;
+    cursor: pointer;
+}
+.input_class{
+    height: 12%;
+    width: 70%;
+    background-color: transparent;
+    position: relative;
+    // left: -17%;
+    bottom: 4%;
+    font-size: 16px;
+    border-radius: 20px;
+    color: white;
+    text-align: center;
+    border: none;
+    // border: 1px solid #1666ff;
+}
+.input_class:hover{
+    border: 1px solid #1666ff;
+}
+.input_class:focus{
+    outline: none;
+    border: 1px solid #1666ff;
+}
+.input_class::placeholder {
+    color: silver;
+    font-size: 14px;
+    text-align: center;
+    // position: relative;
+    // right: 35%;
+  }
+  .input_class:focus::placeholder {
+    color: transparent;
+  }
+.login_btn{
+    height: 12%;
+    width: 70%;
+    background-color: #0075ff;
+    border-radius: 12px;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+.login_btn:hover{
+    background-color: #005dcc;
+}
+.label_class{
+    position: relative;
+    left: -27%;
+    font-size: 14px;
+}
+.change_user{
+    height: 20%;
+    width: 30%;
+    position: absolute;
+    top: 70%;
+    left: 10%;
+}
+.user_logo{
+    height: 75%;
+    width: 25%;
+    cursor: pointer;
+    border-radius: 50px;
+}
+.user_logo:hover{
+    -webkit-box-shadow: 0px 4px 13px 0px rgba(0, 0, 0, 0.8);
+    -moz-box-shadow: 0px 4px 13px 0px rgba(0, 0, 0, 0.8);
+    box-shadow: 0px 4px 13px 0px rgba(0, 0, 0, 0.8);
+}
+.user_type{
+    height: 8%;
+    width: 30%;
+    position: absolute;
+    left: 10%;
+    top: 92%;
+}
+.su_text{
+    display: inline-block;
+    margin: 0px;
+    position: relative;
+    left: 19%;
+    font-size: 16px;
+    font-weight: bold;
+}
+.user_text{
+    display: inline-block;
+    margin: 0px;
+    position: relative;
+    left: 67%;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flex-col{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.flex-row-even{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.flex-col-even{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.shadow{
+    -webkit-box-shadow: 0px 4px 13px 0px rgba(60, 54, 235, 0.8);
+    -moz-box-shadow: 0px 4px 13px 0px rgba(60, 54, 235, 0.8);
+    box-shadow: 0px 4px 13px 0px rgba(60, 54, 235, 0.8);
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background-color: #eeece9;
+    box-shadow: inset 0 0 5px darkgrey; 
+    border-radius: 6px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    /* background: linear-gradient(to right, #517fa4 0%, #243949  51%, #517fa4  100%);  */
+    background-image: linear-gradient(to bottom, #0575E6 0%, #021B79  100%);
+    border-radius: 6px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to top, #0575E6 0%, #021B79  100%);
+  }

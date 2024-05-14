@@ -1,0 +1,226 @@
+<body *ngIf="curr_body == 'Dashboard'">
+    <img src="../../assets/icons/background_img.png" alt="" class="full">
+    <img src="../../assets/icons/blue_img_full.png" alt="" class="blur_img_class">
+    <div class="header_class flex-row-even shadow">
+        <img src="../../assets/icons/logo.png" alt="" class="logo_class">
+        <ul class="header_options flex-row-even"> 
+            <button *ngIf ="curr_view == 'Dashboard'" class="header_btn white_text active">Dashboard</button>
+            <button *ngIf ="curr_view != 'Dashboard'" class="header_btn white_text" (click)="changeView(0)">Dashboard</button>
+            <button *ngIf ="curr_view == 'Settings'" class="header_btn white_text active">Settings</button>
+            <button *ngIf ="curr_view != 'Settings'" class="header_btn white_text" (click)="changeView(1)">Settings</button>
+        </ul>
+        <button class="Btn" (click)="logout()">
+            <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
+            <div class="text">Logout</div>
+        </button>
+    </div>
+    <div class="cam_feed_class flex-row-even">
+        <img *ngIf="!cam_status_1" src="../../assets/icons/video.png" alt="" class="cam_feed">
+        <img *ngIf="cam_status_1" [src]="cam_feed_1" alt="" class="cam_feed">
+        <img *ngIf="!cam_status_2" src="../../assets/icons/video.png" alt="" class="cam_feed">
+        <img *ngIf="cam_status_2" [src]="cam_feed_2" alt="" class="cam_feed">
+    </div>
+
+    <div class="table_full_container flex-row-even">
+        <div class="table_container flex-col-even">
+            <div class="flow_icon_container flex-row-even">
+                <div *ngIf="!slab_waiting_flag" class="wrapper flex-col-even Opacity_1">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+                <div *ngIf="slab_waiting_flag" class="wrapper flex-col-even fade-in">
+                    <img src="../../assets/icons/steel.png" alt="" class="icon_img">
+                </div>
+                <img [ngClass]="mode_select_flag ? 'icon_class fade-in' : 'icon_class Opacity'" src="../../assets/icons/right-arrow.png" alt="" >
+                <div [ngClass]="mode_select_flag ? 'wrapper fade-in flex-col-even' : 'wrapper Opacity flex-col-even'">
+                    <img *ngIf="manual_mode" src="../../assets/icons/gear.png" alt="" class="icon_img">
+                    <img *ngIf="!manual_mode" src="../../assets/icons/running.png" alt="" class="icon_img">
+                </div>
+                <img [ngClass]="slab_id_flag ? 'icon_class fade-in' : 'icon_class Opacity'" src="../../assets/icons/right-arrow.png" alt="">
+                <div [ngClass]="slab_id_flag ? 'wrapper fade-in flex-col-even' : 'wrapper Opacity flex-col-even'">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+                <img [ngClass]="share_data_flag ? 'icon_class fade-in' : 'icon_class Opacity'" src="../../assets/icons/right-arrow.png" alt="">
+                <div [ngClass]="share_data_flag ? 'wrapper fade-in flex-col-even' : 'wrapper Opacity flex-col-even'">
+                    <img src="../../assets/icons/data-transfer.png" alt="" class="icon_img">
+                </div>
+                <img [ngClass]="receive_data_flag ? 'icon_class fade-in' : 'icon_class Opacity'" src="../../assets/icons/right-arrow.png" alt="">
+                <div [ngClass]="receive_data_flag ? 'wrapper fade-in flex-col-even' : 'wrapper Opacity flex-col-even'">
+                    <img src="../../assets/icons/data_sent.png" alt="" class="icon_img">
+                </div>
+                <img [ngClass]="data_stored_flag ? 'icon_class fade-in' : 'icon_class Opacity'" src="../../assets/icons/right-arrow.png" alt="">
+                <div [ngClass]="data_stored_flag ? 'wrapper fade-in flex-col-even' : 'wrapper Opacity flex-col-even'">
+                    <img src="../../assets/icons/database.png" alt="" class="icon_img">
+
+                </div>
+            </div>
+            <div class="flow_text_container flex-row-even">
+                <p *ngIf="!slab_waiting_flag" class="Opacity_1" style="position: relative; right: 5%;">Waiting for Slab</p>
+                <p *ngIf="slab_waiting_flag" class="fade-in" style="position: relative; right: 5%;">Slab Entered</p>
+
+                <p *ngIf="!manual_mode && !mode_select_flag" class="Opacity" style="position: relative; right: 1%;">Auto Mode</p>
+                <p *ngIf="!manual_mode && mode_select_flag" class="fade-in" style="position: relative; right: 0%;">Auto Mode</p>
+                <p *ngIf="manual_mode && !mode_select_flag" class="Opacity" style="position: relative; right: 2%;">Manual Mode</p>
+                <p *ngIf="manual_mode && mode_select_flag" class="fade-in" style="position: relative; right: 1%;">Manual Mode</p>
+
+                <p *ngIf="!manual_mode && !slab_id_flag" class="Opacity" style="position: relative; left: 3.5%;">Detecting Slab ID</p>
+                <p *ngIf="!manual_mode && slab_id_flag" class="fade-in" style="position: relative; left: 3.5%;">Slab ID Detected</p>
+                <p *ngIf="manual_mode && !slab_id_flag" class="Opacity" style="position: relative; left: 3%;">Enter Slab ID</p>
+                <p *ngIf="manual_mode && slab_id_flag" class="fade-in" style="position: relative; left: 3%;">Slab ID Entered</p>
+
+                <p [ngClass]="share_data_flag ? 'fade-in' : 'Opacity'" style="position: relative; left: 5%;">Share data to L3</p>
+                <p [ngClass]="receive_data_flag ? 'fade-in' : 'Opacity'" style="position: relative; left: 4.5%;">Received Remarks from L3</p>
+                <p [ngClass]="data_stored_flag ? 'fade-in' : 'Opacity'" style="position: relative; left: 4%;">Data stored</p>
+            </div>
+
+        </div>
+
+        <div class="mode_selector flex-col-even">
+            <input id="checkbox_toggle" type="checkbox" class="check">
+            <div class="checkbox" (click)="(popup_flag = true)">
+              <label class="slide" for="checkbox_toggle">
+                <label class="toggle flex-col-even" for="checkbox_toggle">
+                    <p *ngIf="!manual_mode"><b>AUTO</b></p>
+                    <p *ngIf="manual_mode"><b>MANUAL</b></p>
+                </label>
+              </label>
+            </div>
+
+            <div *ngIf="manual_mode" class="manual_mode_active flex-row-even">
+                <p>Slab ID :</p>
+                <input type="text" id="manual_slabId" [readonly]="!manual_mode">
+                <button type="button" (click)="manual_mode ? submitSlabId() : null">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="popup_flag" class="overlay">
+        <div class="warningContainer flex-col-even">
+            <div class="warning_inner_container flex-col-even">
+                <h1>Do you really want to change the Mode ?</h1>
+            </div>
+            <div class="warning_inner_container flex-row-even">
+                <button class="btnSize bg-color_green" (click)="change_mode(true)">Yes</button>
+                <button class="btnSize bg-color_red" (click)="change_mode(false)">No</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<body *ngIf="curr_body == 'Settings'">
+    <img src="../../assets/icons/background_img.png" alt="" class="full">
+    <img src="../../assets/icons/blue_img_full.png" alt="" class="blur_img_class">
+    <div class="header_class flex-row-even shadow">
+        <img src="../../assets/icons/logo.png" alt="" class="logo_class ">
+        <ul class="header_options flex-row-even"> 
+            <button *ngIf ="curr_view == 'Dashboard'" class="header_btn white_text active">Dashboard</button>
+            <button *ngIf ="curr_view != 'Dashboard'" class="header_btn white_text" (click)="changeView(0)">Dashboard</button>
+            <button *ngIf ="curr_view == 'Settings'" class="header_btn white_text active">Settings</button>
+            <button *ngIf ="curr_view != 'Settings'" class="header_btn white_text" (click)="changeView(1)">Settings</button>
+            <!-- <button *ngIf ="curr_view == 'Report'" class="header_btn white_text active">Report</button>
+            <button *ngIf ="curr_view != 'Report'" class="header_btn white_text" (click)="changeView(2)">Report</button> -->
+        </ul>
+        <button class="Btn" (click)="logout()">
+            <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
+            <div class="text">Logout</div>
+        </button>
+    </div>
+    <div class="setting_class flex-row-even">
+        <div class="left_container">
+            <div *ngFor="let item of settings_view; let i = index" [ngClass]="curr_settings_view === item ? 'white_text setting_options flex-row-even shadow' : 'white_text setting_options flex-row-even'" (click)="changeSettingView(i)">
+                <img [src]="'../../assets/icons/' + setting_icon_list[i]" alt="" class="setting_icon_class">
+                <h3 class="setting_options_header">{{item}} Setting</h3>
+            </div>
+        </div>
+        <div *ngIf="curr_settings_view == 'Camera'" class="right_container flex-row-even">
+            <div class="cam_details shadow flex-col-even">
+                <h2 class="cam_heading white_text">Enter Camera 1 Details</h2><br>
+                <label for="cam_ip1" class="white_text label_class">Camera IP :</label>
+                <br>
+                <input type="text" class="input_class" id="camIP1" placeholder="192.168.x.x">
+                
+                <label for="user_id1" class="white_text label_class">User ID :</label>
+                <br>
+                <input type="text" class="input_class" id="userID1" placeholder="Enter User Id">
+                
+                <label for="password1" class="white_text label_class">Password :</label>
+                <br>
+                <input type="password" class="input_class" id="password1" placeholder="Password">
+                
+                <label for="port1" class="white_text label_class">Port :</label>
+                <br>
+                <input type="text" class="input_class" id="port1" value="554" placeholder="port" style="cursor: not-allowed;" readonly>
+                <br>
+                <button type="submit" class="login_btn" (click)="addCam('Cam1')" (keydown.enter)="addCam('Cam1')">Submit</button>
+            </div>
+            <div class="cam_details shadow flex-col-even">
+                <h2 class="cam_heading white_text">Enter Camera 2 Details</h2><br>
+                <label for="cam_ip2" class="white_text label_class">Camera IP :</label>
+                <br>
+                <input type="text" class="input_class" id="camIP2" placeholder="192.168.x.x">
+                
+                <label for="user_id2" class="white_text label_class">User ID :</label>
+                <br>
+                <input type="text" class="input_class" id="userID2" placeholder="User ID">
+                
+                <label for="password2" class="white_text label_class">Password :</label>
+                <br>
+                <input type="password" class="input_class" id="password2" placeholder="Password">
+                
+                <label for="port2" class="white_text label_class">Port :</label>
+                <br>
+                <input type="text" class="input_class" id="port2" value="554" placeholder="port" style="cursor: not-allowed;" readonly>
+                <br>
+                <button type="submit" class="login_btn" (click)="addCam('Cam2')" (keydown.enter)="addCam('Cam2')">Submit</button>
+            </div>
+        </div>
+        <div *ngIf="curr_settings_view == 'Database'" class="right_container flex-row-even">
+            <div class="cam_details shadow flex-col-even">
+                <h2 class="cam_heading white_text">Enter Database Details</h2><br>
+                <label for="host" class="white_text label_class">Host</label>
+                <br>
+                <input type="text" class="input_class" id="host" placeholder="192.168.x.x">
+                
+                <label for="user_id" class="white_text label_class">User ID :</label>
+                <br>
+                <input type="text" class="input_class" id="userID" placeholder="User ID">
+                
+                <label for="password" class="white_text label_class">Password :</label>
+                <br>
+                <input type="password" class="input_class" id="password" placeholder="Password">
+                
+                <label for="db" class="white_text label_class">Database</label>
+                <br>
+                <input type="text" class="input_class" id="db" placeholder="DB Name">
+                <br>
+                <button type="submit" class="login_btn" (click)="addDB()" (keydown.enter)="addDB()">Submit</button>
+            </div>
+        </div>
+        <!-- <div *ngIf="curr_settings_view == 'PLC'" class="right_container flex-row-even">
+            <div class="cam_details shadow flex-col-even">
+                <h2 class="cam_heading white_text">Enter PLC Details</h2><br>
+                <label for="host" class="white_text label_class">Host</label>
+                <br>
+                <input type="text" class="input_class" id="host" placeholder="192.168.x.x">
+                
+                <label for="user_id" class="white_text label_class">User ID :</label>
+                <br>
+                <input type="text" class="input_class" id="userID" placeholder="User ID">
+                
+                <label for="password" class="white_text label_class">Password :</label>
+                <br>
+                <input type="password" class="input_class" id="password" placeholder="Password">
+                
+                <label for="plc" class="white_text label_class">PLC</label>
+                <br>
+                <input type="text" class="input_class" id="plc" placeholder="PLC">
+                <br>
+                <button type="submit" class="login_btn" (click)="addPLC()" (keydown.enter)="addPLC()">Submit</button>
+            </div>
+        </div> -->
+    </div>
+</body>

@@ -1,0 +1,39 @@
+<body class="flex-row-even">
+    <img src="../../assets/icons/login_page_img.png" alt="Welcome" class="welcomeClass">
+    <div class="change_user flex-row-even">
+        <img *ngIf="curr_user == 'super_user'" class="user_logo shadow" src="../../assets/icons/profile.png" alt="">
+        <img *ngIf="curr_user != 'super_user'" class="user_logo" src="../../assets/icons/profile.png" alt="" (click)="change_user(0)">
+        <img *ngIf="curr_user == 'dashboard'" class="user_logo shadow" src="../../assets/icons/administrator.png" alt="">
+        <img *ngIf="curr_user != 'dashboard'" class="user_logo" src="../../assets/icons/administrator.png" alt="" (click)="change_user(1)">
+    </div>
+    <div class="user_type">
+        <p *ngIf="curr_user == 'super_user'" class="white_text su_text">Super User</p>
+        <p *ngIf="curr_user != 'super_user'" class="su_text"></p>
+        <p *ngIf="curr_user == 'dashboard'" class="white_text user_text">User</p>
+        <p *ngIf="curr_user != 'dashboard'" class="user_text"></p>
+    </div>
+    <!-- <img src="../../assets/icons/background_img.png" alt="Welcome" class="welcomeClass"> -->
+    <div class="login_form">
+        <img src="../../assets/icons/background_img.png" alt="" class="full">
+        <div class="login_header flex-row-even">
+            <img src="../../assets/icons/logo.png" alt="deevia-logo" class="logo_class">
+        </div>
+        <div class="login_from_container flex-col-even">
+            <h2 *ngIf="curr_user == 'super_user'" class="white_text">Welcome Back Super User !</h2>
+            <h2 *ngIf="curr_user == 'dashboard'" class="white_text">Welcome Back User !</h2><br>
+            <label for="user_id" class="white_text label_class">User ID :</label>
+            <br>
+            <input type="text" class="input_class shadow" id="userID" placeholder="Enter User ID">
+            <br>
+            <label for="user_id" class="white_text label_class">Password :</label>
+            <br>
+            <input type="password" class="input_class shadow" id="password" placeholder="Enter Password">
+            <br><br>
+            <button type="submit" class="login_btn" (click)="login()">Submit</button>
+        </div>
+        <div class="show_hide flex-col-even">
+            <img *ngIf="!view_password" src="../../assets/icons/visual.png" alt="" class="viewPasswordClass" (click)="show_password()">
+            <img *ngIf="view_password" src="../../assets/icons/close-eye.png" alt="" class="viewPasswordClass" (click)="close_password()">
+        </div>
+    </div>
+</body>
